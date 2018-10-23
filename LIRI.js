@@ -1,25 +1,45 @@
 require('dotenv/config');
+let chalk = require('chalk');
+let wrap = require('word-wrap');
 let keys = require('./keys.js')
 let Spotify = require('node-spotify-api');
 let spotify = new Spotify(keys.spotify);
 let command = process.argv[2];
-let searchTerm = process.argv[3];
+let searchTerm = '';
+let nodeArgs = process.argv;
+for (var i = 3; i < nodeArgs.length; i++) {
+    if (i > 3 && i < nodeArgs.length) {
+        searchTerm = searchTerm + "+" + nodeArgs[i];
+    }
+    else {
+        searchTerm += nodeArgs[i];
+    }
+}
 let fs = require('fs');
 const OMDBKey = 'f328bf48'
 const chalkAnimation = require('chalk-animation');
- 
-chalkAnimation.rainbow('Lorem ipsum dolor sit amet');
 
 
 
-console.log(command);
-console.log(searchTerm);
-
-
-
-
-
-
+console.log(chalk.black.bgWhiteBright(`.......................................................................................`));
+console.log(chalk.black.bgCyan(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRR.................IIIII..`));
+console.log(chalk.black.bgGreen(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRRR................IIIII..`));
+console.log(chalk.black.bgYellow(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRRR................IIIII..`));
+console.log(chalk.black.bgBlue(`.LLLLL.......................IIIII...............RRRRR....RRRRRR................IIIII..`));
+console.log(chalk.black.bgMagenta(`.LLLLL.......................IIIII...............RRRRR.....RRRRR................IIIII..`));
+console.log(chalk.black.bgCyan(`.LLLLL.......................IIIII...............RRRRR.....RRRRR................IIIII..`));
+console.log(chalk.black.bgWhite(`.LLLLL.......................IIIII...............RRRRR....RRRRRR................IIIII..`));
+console.log(chalk.black.bgBlackBright(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRRR................IIIII..`));
+console.log(chalk.black.bgRedBright(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRR.................IIIII..`));
+console.log(chalk.black.bgGreenBright(`.LLLLL.......................IIIII...............RRRRRRRRRRRRR..................IIIII..`));
+console.log(chalk.black.bgYellowBright(`.LLLLL.......................IIIII...............RRRRR.RRRRRRR..................IIIII..`));
+console.log(chalk.black.bgBlueBright(`.LLLLL.......................IIIII...............RRRRR..RRRRRRR.................IIIII..`));
+console.log(chalk.black.bgMagentaBright(`.LLLLL.......................IIIII...............RRRRR...RRRRRR.................IIIII..`));
+console.log(chalk.black.bgCyanBright(`.LLLLL.......................IIIII...............RRRRR....RRRRRR................IIIII..`));
+console.log(chalk.black.bgWhiteBright(`.LLLLLLLLLLLLLL..............IIIII...............RRRRR....RRRRRRR...............IIIII..`));
+console.log(chalk.black.bgYellow(`.LLLLLLLLLLLLLL..............IIIII...............RRRRR.....RRRRRR...............IIIII..`));
+console.log(chalk.black.bgCyan(`.LLLLLLLLLLLLLL..............IIIII...............RRRRR......RRRRRR..............IIIII..`));
+console.log(chalk.black.bgGreen(`.......................................................................................`));
 
 
 // 9. Make it so liri.js can take in one of the following commands:
@@ -39,9 +59,6 @@ function LIRI(command, term) {
 
                 // Then run a request to the OMDB API with the movie specified
                 let queryUrl = `https://rest.bandsintown.com/artists/${artist}/events?app_id=codingbootcamp`;
-
-                console.log(queryUrl);
-
                 request(queryUrl, function (error, response, body) {
 
                     // If the request is successful
@@ -49,12 +66,19 @@ function LIRI(command, term) {
 
                         // Parse the body of the site and recover just the imdbRating
                         // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-                        console.log(JSON.parse(body));
+                        // console.log(JSON.parse(body));
 
 
-                        console.log(JSON.parse(body)[0].venue.name);            // Name of the venue
-                        console.log(JSON.parse(body)[0].venue.city);             // Venue location
-                        console.log(JSON.parse(body)[0].datetime);       // Date of the Event 
+
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`||     VENUE:                                                     ${JSON.parse(body)[0].venue.name}`, { width: 83 }));            // Name of the venue
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`||     CITY:                                                      ${JSON.parse(body)[0].venue.city}`, { width: 83 }));             // Venue location
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`||     DATE and TIME:                                             ${JSON.parse(body)[0].datetime}`, { width: 83 }));       // Date of the Event 
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(chalk.yellow(`.......................................................................................`));
                         //TODO:(use moment to format this as "MM/DD/YYYY")
 
 
@@ -71,10 +95,18 @@ function LIRI(command, term) {
                     if (err) {
                         return console.log('Error occurred: ' + err);
                     }
-                    console.log(data.tracks.items[0].artists[0].name); // Artist(s)
-                    console.log(data.tracks.items[0].name);            // The song's name
-                    console.log(data.tracks.items[0].preview_url);     // A preview link of the song from Spotify
-                    console.log(data.tracks.items[0].album.name);      // The album that the song is from
+                    console.log("----------------------------------------------------");
+                    console.log("----------------------------------------------------");
+                    console.log(wrap(`||     ARTIST:                                                    ${data.tracks.items[0].artists[0].name}`, { width: 83 })); // Artist(s)
+                    console.log("----------------------------------------------------");
+                    console.log(wrap(`||     SONG:                                                      ${data.tracks.items[0].name}`, { width: 83 }));            // The song's name
+                    console.log("----------------------------------------------------");
+                    console.log(wrap(`||     PREVIEW:                                                   ${data.tracks.items[0].preview_url}`, { width: 83 }));     // A preview link of the song from Spotify
+                    console.log("----------------------------------------------------");
+                    console.log(wrap(`||     ALBUM:                                                     ${data.tracks.items[0].album.name}`, { width: 83 }));      // The album that the song is from
+                    console.log("----------------------------------------------------");
+                    console.log("----------------------------------------------------");
+
                 });
                 //    * If no song is provided then your program will default to "The Sign" by Ace of Base.
             }
@@ -91,7 +123,6 @@ function LIRI(command, term) {
                 let queryUrl = `http://www.omdbapi.com/?apikey=${OMDBKey}&t=${movie}`;
                 // queryUrl = `http://www.omdbapi.com/?i=tt3896198&apikey=f328bf48`
 
-                console.log(queryUrl);
 
                 request(queryUrl, function (error, response, body) {
 
@@ -102,15 +133,26 @@ function LIRI(command, term) {
                         // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
                         // console.log(JSON.parse(body));
 
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`MOVIE:                                                        ${JSON.parse(body).Title}`, { width: 83 }));    //        * Title of the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`RELEASE YEAR:                                                 ${JSON.parse(body).Year}`, { width: 83 }));            //        * Year the movie came out.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`IMDB:                                                         ${JSON.parse(body).imdbRating}`, { width: 83 }));            //        * IMDB Rating of the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`ROTTEN TOMATOES:                                              ${JSON.parse(body).Ratings[1].Source + ' ' + JSON.parse(body).Ratings[1].Value}`, { width: 83 }));            //        * Rotten Tomatoes Rating of the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`COUNTRY:                                                      ${JSON.parse(body).Country}`, { width: 83 }));            //        * Country where the movie was produced.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`LANGUAGE:                                            ${JSON.parse(body).Language}`, { width: 83 }));            //        * Language of the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`PLOT:                                                         ${JSON.parse(body).Plot}`, { width: 83 }));            //        * Plot of the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(wrap(`ACTORS:                                                       ${JSON.parse(body).Actors}`, { width: 83 }));            //        * Actors in the movie.
+                        console.log(chalk.yellow(`.......................................................................................`));
+                        console.log(chalk.yellow(`.......................................................................................`));
 
-                        console.log(JSON.parse(body).Title);    //        * Title of the movie.
-                        console.log(JSON.parse(body).Year);            //        * Year the movie came out.
-                        console.log(JSON.parse(body).imdbRating);            //        * IMDB Rating of the movie.
-                        console.log(JSON.parse(body).Ratings[1].Source + ' ' + JSON.parse(body).Ratings[1].Value);            //        * Rotten Tomatoes Rating of the movie.
-                        console.log(JSON.parse(body).Country);            //        * Country where the movie was produced.
-                        console.log(JSON.parse(body).Language);            //        * Language of the movie.
-                        console.log(JSON.parse(body).Plot);            //        * Plot of the movie.
-                        console.log(JSON.parse(body).Actors);            //        * Actors in the movie.
                         //      ```
 
                         //TODO: Ask if there is a database that checks if the term is a movie or not.  
@@ -140,7 +182,7 @@ function LIRI(command, term) {
                 let newCommand = dataArr[0];
                 let newSearchTerm = dataArr[1];
                 LIRI(newCommand, newSearchTerm);
-                
+
 
                 //      * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
 
