@@ -20,7 +20,7 @@ const OMDBKey = 'f328bf48'
 const chalkAnimation = require('chalk-animation');
 
 
-
+//LIRI Big Letters
 console.log(chalk.black.bgWhiteBright(`.......................................................................................`));
 console.log(chalk.black.bgCyan(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRR.................IIIII..`));
 console.log(chalk.black.bgGreen(`.LLLLL.......................IIIII...............RRRRRRRRRRRRRRR................IIIII..`));
@@ -45,6 +45,7 @@ console.log(chalk.black.bgGreen(`...............................................
 // 9. Make it so liri.js can take in one of the following commands:
 LIRI(command, searchTerm);
 function LIRI(command, term) {
+    let data = '';
     switch (command) {
 
         case `concert-this`: concertThis(term)
@@ -63,6 +64,7 @@ function LIRI(command, term) {
 
                     // If the request is successful
                     if (!error && response.statusCode === 200) {
+                        data += JSON.stringify(response, null, 2);
 
                         // Parse the body of the site and recover just the imdbRating
                         // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
@@ -72,17 +74,17 @@ function LIRI(command, term) {
 
                         console.log(chalk.yellow(`.......................................................................................`));
                         console.log(chalk.yellow(`.......................................................................................`));
-                        console.log(wrap(`||     VENUE:                                                     ${JSON.parse(body)[0].venue.name}`, { width: 83 }));            // Name of the venue
+                        console.log(wrap(`||     VENUE:                                             ${JSON.parse(body)[0].venue.name}`, { width: 83 }));            // Name of the venue
                         console.log(chalk.yellow(`.......................................................................................`));
-                        console.log(wrap(`||     CITY:                                                      ${JSON.parse(body)[0].venue.city}`, { width: 83 }));             // Venue location
+                        console.log(wrap(`||     CITY:                                              ${JSON.parse(body)[0].venue.city}`, { width: 83 }));             // Venue location
                         console.log(chalk.yellow(`.......................................................................................`));
-                        console.log(wrap(`||     DATE and TIME:                                             ${JSON.parse(body)[0].datetime}`, { width: 83 }));       // Date of the Event 
+                        console.log(wrap(`||     DATE and TIME:                                     ${JSON.parse(body)[0].datetime}`, { width: 83 }));       // Date of the Event 
                         console.log(chalk.yellow(`.......................................................................................`));
                         console.log(chalk.yellow(`.......................................................................................`));
                         //TODO:(use moment to format this as "MM/DD/YYYY")
 
 
-
+                        log(data);
                     }
                 });
             };
@@ -106,7 +108,9 @@ function LIRI(command, term) {
                     console.log(wrap(`||     ALBUM:                                                     ${data.tracks.items[0].album.name}`, { width: 83 }));      // The album that the song is from
                     console.log("----------------------------------------------------");
                     console.log("----------------------------------------------------");
+                    data += JSON.stringify(data);
 
+                    log(data);
                 });
                 //    * If no song is provided then your program will default to "The Sign" by Ace of Base.
             }
@@ -128,6 +132,8 @@ function LIRI(command, term) {
 
                     // If the request is successful
                     if (!error && response.statusCode === 200) {
+                        data += JSON.stringify(response, null, 2);
+
 
                         // Parse the body of the site and recover just the imdbRating
                         // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
@@ -164,6 +170,7 @@ function LIRI(command, term) {
 
                         //    * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `trilogy`.
 
+                        log(data);
                     }
                 });
 
@@ -187,13 +194,46 @@ function LIRI(command, term) {
                 //      * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
 
                 //      * Edit the text in random.txt to test out the feature for movie-this and my-tweets
+
             });
 
             break;
+        case `log`:
+            fs.readFile("log.txt", "utf8", function (error, data) {
+
+                // If the code experiences any errors it will log the error to the console.
+                if (error) {
+                    return console.log(error);
+                }
+                //    * Using the `fs` Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
+                console.log(data);
+
+                //      * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
+
+                //      * Edit the text in random.txt to test out the feature for movie-this and my-tweets
+            });
+            break;
+
         default:
     }
-}
 
+    function log(data) {
+        fs.appendFile("log.txt", data, function (err) {
+
+            // If an error was experienced we will log it.
+            if (err) {
+                console.log(err);
+            }
+
+            // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+            else {
+                console.log("Content Added!");
+            }
+
+        });
+    }
+
+}
 
 
         // ### BONUS
